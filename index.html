@@ -48,7 +48,7 @@
           <a class="brand">Burlington VT - The South End | 1937 vs. 2012</a>
 		  <ul class="nav pull-right">
 		    <li class="divider-vertical"></li>
-			<li><a href="#myModal" role="button" class="pull-right" data-toggle="modal"><small>About</small></a></li>
+			<li><a href="#myModal" role="button" class="pull-right" data-toggle="modal">About</a></li>
 		  </ul>
         </div>
       </div>
@@ -62,7 +62,7 @@
       <div class="modal-body">
         <p>This map compares aerial views of Burlington's South End between 1937 and 2012, offering a window into patterns of residential and industrial development over nearly eight decades. Drag the slider on the left to toggle between old and new.</p>
         <hr>
-        <ul class="unstyled">
+        <ul>
 		  <li>1937 Imagery acquired by the Sanborn Fire Insurance co. and archived by <a href="http://library.uvm.edu/docs/index.php" target="_blank">the UVM Baily-Howe Library</a></li>
 		  <li>2012 Imagery provided by <a href="http://www.mapbox.com/about/maps/" target="_blank">Mapbox</a></li>
 		  <li>Street and Reference data by <a href="http://osm.org" target="_blank">OpenStreetmap Contributors</a></li>
@@ -76,7 +76,8 @@
 
 </body>
 <script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.7/mapbox.js'></script>
-  <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.1/js/bootstrap.min.js"></script>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
+<script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
 <script>
     var layerIDs = [
         'landplanner.map-khn9uycz',
@@ -92,6 +93,7 @@
         map.centerzoom({ 
             lat:44.46152669839011, lon: -73.21900373016356
         }, 16);
+		map.ui.hash.add();
 
         var handle = document.getElementById('handle'),
             start,
@@ -118,5 +120,8 @@
             map.parent.style.cursor = 'default';
         }
     });
+	$('#myModal2').click(function(){
+		$('#myModal').modal('show')
+	});
 </script>
 </html>
