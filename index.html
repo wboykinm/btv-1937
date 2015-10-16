@@ -1,124 +1,61 @@
 <!DOCTYPE html>
 <html>
 <head>
-  <link href='http://api.tiles.mapbox.com/mapbox.js/v0.6.7/mapbox.css' rel='stylesheet' />
-  <link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootswatch/2.3.1/simplex/bootstrap.min.css" />
-  <style>
-    body { margin:0; padding:0; }
-    /*#map { position:absolute; top:0; bottom:0; width:100%; }*/
-	#map {width: 100%; /*height:100%;*/ position: absolute; top: 40px; bottom: 0px; background: black;}	
-  </style>
+<meta charset=utf-8 />
+<title>BTV-1937</title>
+<meta name='viewport' content='initial-scale=1,maximum-scale=1,user-scalable=no' />
+<link rel="stylesheet" href="http://netdna.bootstrapcdn.com/bootswatch/2.3.1/simplex/bootstrap.min.css" />
+<link href='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.css' rel='stylesheet' />
+<style>
+  body { margin:0; padding:0; }
+  #map { position:absolute; top:0; bottom:0; width:100%; }
+</style>
 </head>
 <body>
+
+
 <style>
-  #control {
-    background:#FFF;
-    position:absolute;
-    left:10px;
-    top:90px;
-    height:200px;
-    width:28px;
-    border:1px solid #BBB;
-    -webkit-border-radius:3px;
-            border-radius:3px;
-    }
-    #handle {
-      background:#000;
-      position: absolute;
-      left:0;
-      top:20px;
-      width:28px;
-      height:10px;
-      }
-    #handle:hover {
-      cursor:pointer;
-      background:#444;
-      cursor:ns-resize;
-      }
+.range {
+  bottom: 20px;
+  position:absolute;
+  width:100%;
+  }
+.leaflet-top .leaflet-control-zoom {
+  top:20px;
+  }
 </style>
 
 <div id='map'></div>
-<div id='control'>
-    <div id='handle'></div>
-</div>
-<!--SOME BOOTSTRAP NAV BOILERPLATE TO MAKE THINGS SIMPLE AND APPEALING-->
-    <div class="navbar navbar-fixed-top">
-      <div class="navbar-inner">
-        <div class="container">
-          <a class="brand">Burlington VT - The South End | 1937 vs. 2012</a>
-		  <ul class="nav nav-pills pull-right">
-		    <li class="divider-vertical"></li>
-			<li><a href="#myModal" role="button" class="lead" data-toggle="modal"><large>About</large></a></li>
-		  </ul>
-        </div>
-      </div>
-    </div>
-<!-- Modal -->
-	<div id="myModal" class="modal hide fade" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
-      <div class="modal-header">
-        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-        <h3 id="myModalLabel">About</h3>
-      </div>
-      <div class="modal-body">
-        <p>This map compares aerial views of Burlington's South End between 1937 and 2012, offering a window into patterns of residential and industrial development over nearly eight decades. Drag the slider on the left to toggle between old and new.</p>
-        <hr>
-        <ul>
-		  <li>1937 Imagery acquired by the Sanborn Fire Insurance co. and archived by <a href="http://library.uvm.edu/docs/index.php" target="_blank">the UVM Baily-Howe Library</a></li>
-		  <li>2012 Imagery provided by <a href="http://www.mapbox.com/about/maps/" target="_blank">Mapbox</a></li>
-		  <li>Street and Reference data by <a href="http://osm.org" target="_blank">OpenStreetmap Contributors</a></li>
-		  <li>Application by <a href="http://geosprocket.com" target="_blank">Geosprocket</a></li>
-		</ul>
-      </div>
-      <div class="modal-footer">
-        <button class="btn" data-dismiss="modal" aria-hidden="true">Close</button>
-      </div>
-    </div>
+<input id='range' class='range' type='range' min='0' max='1.0' step='any' />
 
-</body>
-<script src='http://api.tiles.mapbox.com/mapbox.js/v0.6.7/mapbox.js'></script>
+
+
 <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.1/jquery.min.js"></script>
 <script src="http://netdna.bootstrapcdn.com/twitter-bootstrap/2.3.2/js/bootstrap.min.js"></script>
+<script src='https://api.mapbox.com/mapbox.js/v2.2.2/mapbox.js'></script>
 <script>
-    var layerIDs = [
-        'landplanner.map-khn9uycz',
-        'landplanner.btv-1937'
-    ];
+L.mapbox.accessToken = 'pk.eyJ1IjoiZmFyYWRheTIiLCJhIjoiTUVHbDl5OCJ9.buFaqIdaIM3iXr1BOYKpsQ';
+var map = L.mapbox.map('map');
+L.tileLayer('http://mapwarper.net/maps/tile/11003/{z}/{x}/{y}.png').addTo(map);
 
-    mapbox.auto('map', layerIDs, function(map) {
+var overlay = L.mapbox.tileLayer('faraday2.mi9pl4hl').addTo(map);
+var range = document.getElementById('range');
 
-        // Disable compositing so we can adjust opacity of individual layers
-        map.getLayerAt(0).composite(false);
+function clip() {
+  var nw = map.containerPointToLayerPoint([0, 0]),
+      se = map.containerPointToLayerPoint(map.getSize()),
+      clipX = nw.x + (se.x - nw.x) * range.value;
 
-        // Set initial center and zoom level
-        map.centerzoom({ 
-            lat:44.46152669839011, lon: -73.21900373016356
-        }, 16);
-		map.ui.hash.add();
+  overlay.getContainer().style.clip = 'rect(' + [nw.y, clipX, se.y, nw.x].join('px,') + 'px)';
+}
 
-        var handle = document.getElementById('handle'),
-            start,
-            startTop;
+range['oninput' in range ? 'oninput' : 'onchange'] = clip;
+map.on('move', clip);
+map.setView([44.45677, -73.21933], 15);
 
-        document.onmousemove = function(e) {
-            if (!start) return;
-            // Adjust control
-            handle.style.top = Math.max(-5, Math.min(195, startTop + parseInt(e.clientY, 10) - start)) + 'px';
-            // Adjust opacity
-            map.getLayerAt(1).parent.style.opacity = 1 - (handle.offsetTop / 200);
-            map.parent.style.cursor = 'ns-resize';
-        }
-
-        handle.onmousedown = function(e) {
-            // Record initial positions
-            start = parseInt(e.clientY, 10);
-            startTop = handle.offsetTop - 5;
-            return false;
-        }
-
-        document.onmouseup = function(e) {
-            start = null;
-            map.parent.style.cursor = 'default';
-        }
-    });
+clip();
 </script>
+
+
+</body>
 </html>
