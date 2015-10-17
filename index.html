@@ -69,14 +69,54 @@
         </style>
     </head>
     <body>
+        <style>
+        .infoToggle {
+          background:rgba(0,0,0,0);
+          position:absolute;
+          top:10px;left:10px;
+          z-index:1;
+          border-radius:3px;
+          max-width:60px;
+        }
+        </style>
         <a href="#next" class="button dark icon refresh quiet js-next space-top2" id="next">The Pacific Northwest</a>
 
         <div id="swipe">
-            <div class="map1"><h4>1937</h4></div>
-            <img src="swipe.png"/>
-            <div class="map2"><h4>2015</h4></div>
+          <div class="map1"><h4>1937</h4></div>
+          <img src="swipe.png"/>
+          <div class="map2"><h4>2015</h4></div>
         </div>
+        <nav class='infoToggle'>
+          <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">
+            <span class="glyphicon glyphicon-question-sign" aria-hidden="true"></span>
+          </button>
+        </nav>
         <div id='map'></div>
+
+        <!-- Small modal -->
+        <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+          <div class="modal-dialog" role="document">
+            <div class="modal-content">
+              <div class="modal-header">
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                <h4 class="modal-title" id="myModalLabel">Greater Burlington, 1937-2015</h4>
+              </div>
+              <div class="modal-body">
+                <p>This map compares aerial views of Burlington's South End between 1937 and 2015, offering a window into patterns of residential and industrial development over nearly eight decades. Drag the slider on the left to toggle between old and new.</p>
+                <hr>
+                <ul>
+            		  <li>1937 Imagery acquired by the Sanborn Fire Insurance co. and archived by <a href="http://library.uvm.edu/docs/index.php" target="_blank">the UVM Baily-Howe Library</a></li>
+            		  <li>2015 Imagery by <a href="http://www.mapbox.com/about/maps/" target="_blank">Mapbox</a></li>
+            		  <li>Street and Reference data by <a href="http://osm.org" target="_blank">OpenStreetmap Contributors</a></li>
+            		  <li>Historical imagery georeferenced and hosted using <a href="http://mapwarper.net/" target="_blank">Mapwarper</a>, by the NY Public Library</li>
+            		</ul>
+              </div>
+              <div class="modal-footer">
+                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+              </div>
+            </div>
+          </div>
+        </div>
 
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src='https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js'></script>
