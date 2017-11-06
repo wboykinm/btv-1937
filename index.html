@@ -84,7 +84,7 @@
         <div id="swipe">
           <div class="map1"><h4>1937</h4></div>
           <img src="swipe.png"/>
-          <div class="map2"><h4>2015</h4></div>
+          <div class="map2"><h4>2017</h4></div>
         </div>
         <nav class='infoToggle'>
           <button type="button" class="btn btn-info btn-sm" data-toggle="modal" data-target="#myModal">
@@ -99,14 +99,14 @@
             <div class="modal-content">
               <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-                <h4 class="modal-title" id="myModalLabel">Greater Burlington, 1937-2015</h4>
+                <h4 class="modal-title" id="myModalLabel">Greater Burlington, 1937-2017</h4>
               </div>
               <div class="modal-body">
-                <p>This map compares aerial views of the Burlington, VT metro area between 1937 and 2015, offering a window into patterns of residential and industrial development over nearly eight decades. Drag the slider to toggle between old and new.</p>
+                <p>This map compares aerial views of the Burlington, VT metro area between 1937 and 2017, offering a window into patterns of residential and industrial development over nearly eight decades. Drag the slider to toggle between old and new.</p>
                 <hr>
                 <ul>
             		  <li>1937 Imagery acquired by the Sanborn Fire Insurance co. and archived by <a href="http://library.uvm.edu/docs/index.php" target="_blank">the UVM Baily-Howe Library</a></li>
-            		  <li>2015 Imagery by <a href="http://www.mapbox.com/about/maps/" target="_blank">Mapbox</a></li>
+            		  <li>2017 Imagery by <a href="http://www.mapbox.com/about/maps/" target="_blank">Mapbox</a></li>
             		  <li>Street and Reference data by <a href="http://osm.org" target="_blank">OpenStreetmap Contributors</a></li>
             		  <li>Historical imagery georeferenced and hosted using <a href="http://mapwarper.net/" target="_blank">Mapwarper</a>, by the NY Public Library</li>
             		</ul>
@@ -124,9 +124,13 @@
 
         <script>
         L.mapbox.accessToken = 'pk.eyJ1IjoiZmFyYWRheTIiLCJhIjoiTUVHbDl5OCJ9.buFaqIdaIM3iXr1BOYKpsQ';
-        var map = L.mapbox.map('map', 'faraday2.mi9pl4hl', { zoomControl: false, maxZoom:17 })
+        var map = L.mapbox.map('map', null, { zoomControl: false, maxZoom:17 })
             //.addControl(L.mapbox.geocoderControl('mapbox.places-v1'))
             .setView([44.45677, -73.21933], 15);
+            
+        var current = L.tileLayer('https://api.mapbox.com/styles/v1/landplanner/cj9nk5l123jla2rl9hstq664c/tiles/256/{z}/{x}/{y}?access_token=pk.eyJ1IjoibGFuZHBsYW5uZXIiLCJhIjoicUtlZGgwYyJ9.UFYz8MD4lI4kIzk9bjGFvg')
+            .addTo(map);
+
 
         var hash = L.hash(map);
 
